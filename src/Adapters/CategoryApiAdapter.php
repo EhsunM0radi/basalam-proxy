@@ -3,6 +3,7 @@
 namespace Unisa\BasalamProxy\Adapters;
 
 use BasalamSDK\Api\V3CategoryApi;
+use Unisa\BasalamProxy\Exceptions\ApiException;
 
 class CategoryApiAdapter
 {

@@ -18,4 +18,6 @@ interface SdkAdapterInterface
     public function deleteFile(int $id, string $secret_service);
 
     public function bulkDeleteFile(string $secret_service, $bulk_delete_file_schema);
+
+    public function getProductAttributes(int $categoryId);
 }

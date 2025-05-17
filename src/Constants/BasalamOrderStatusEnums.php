@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Enums;
+namespace Unisa\BasalamProxy\Constants;
 
 use BenSampo\Enum\Enum;
 

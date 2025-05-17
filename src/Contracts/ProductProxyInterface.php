@@ -10,4 +10,6 @@ interface ProductProxyInterface
     // public function archive(int $productId);
 
     public function read(int $productId);
+
+    public function getAttributes(string $titile, $categoryId);
 }

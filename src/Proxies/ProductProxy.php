@@ -2,42 +2,45 @@
 
 namespace Unisa\BasalamProxy\Proxies;
 
-use App\Enums\BasalamProductStatusEnums;
-use Unisa\BasalamProxy\Constants\BasalamProductUnitEnums;
+use BasalamSDK\Model\ApiSchemasV4ProductSchemaCreateProductSchema;
 use Unisa\BasalamProxy\Contracts\ProductProxyInterface;
-use Unisa\BasalamProxy\Contracts\SdkAdapterInterface;
-use Unisa\BasalamProxy\DTOs\CreateProductRequest;
+use Unisa\BasalamProxy\DTOs\ProductRequest;
+use Unisa\BasalamProxy\Proxies\Behavior\CreateProduct;
+use Unisa\BasalamProxy\Proxies\Behavior\GetProductAttributes;
+use Unisa\BasalamProxy\Proxies\Behavior\ReadProduct;
+use Unisa\BasalamProxy\Proxies\Behavior\UpdateProduct;
 
 class ProductProxy implements ProductProxyInterface
 {
-    public function __construct(protected SdkAdapterInterface $sdkAdapter) {}
+    public function __construct(
+        protected CreateProduct $createProdcut,
+        protected UpdateProduct $updateProduct,
+        protected GetProductAttributes $getProductAttributes,
+        protected ReadProduct $readProduct
+        ) {}
 
-    public function create(int $vendorid, $createProductRequest)
+    public function create(int $vendorId, $productRequest)
     {
         // پروداکت اتریبیوتس هم نیاز داری https://core.basalam.com/api_v2/category/364/attributes?vendor_id=1211445&exclude_multi_selects=true
         // status تایپ داره. این فکر کنم همون پروداکت استتوسه
         // unit_type هم که همون پروداکت یونیت اینامزه
         // استان ها از با ای پی آی گرفته میشه آیدی هاش
         // موجودی و قیمت وقتی محصول دارای ورینت (تنوع) میشه نال فرستاده میشن
-        // $category = $createProductRequest->category_id ?? $this->sdkAdapter->predictCategory($createProductRequest->title)[0];
-        // dd($createProductRequest->photo->file);
-        $photo = $this->sdkAdapter->uploadFile(config('basalam-proxy.access_token'),$createProductRequest->photo->file,$createProductRequest->photo->file_type);
-        dd($photo->getId());
-        $photos = [];
-        foreach($createProductRequest->photos as $photoObject){
-            $photos[] = $this->sdkAdapter->uploadFile(config('basalam-proxy.access_token'),$photoObject->photo->file,$photoObject->photo->file_type);
-        }
-
-        $this->sdkAdapter->createProduct();
+        return $this->createProdcut->call($vendorId,$productRequest);
     }
 
-    public function update(int $productId, $updateProductRequest)
+    public function getAttributes(string $title, $categoryId=null)
     {
-        return '';
+        dd($this->getProductAttributes->call($title,$categoryId));
+    }
+
+    public function update(int $productId, $productRequest)
+    {
+        return $this->updateProduct->call($productId,$productRequest);
     }
 
     public function read(int $productId)
     {
-        return '';
+        return $this->readProduct->call($productId);
     }
 }

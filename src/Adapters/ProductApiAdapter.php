@@ -6,6 +6,7 @@ use BasalamSDK\Api\V4ProductApi;
 use BasalamSDK\Model\ApiSchemasV4ProductSchemaPatchUpdateProductSchema;
 use BasalamSDK\Model\ApiSchemasV4ProductSchemaCreateProductSchema;
 use BasalamSDK\Model\ApiSchemasV4ProductSchemaUpdateProductVariantsSchema;
+use Unisa\BasalamProxy\Exceptions\ApiException;
 
 class ProductApiAdapter
 {

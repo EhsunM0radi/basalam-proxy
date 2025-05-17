@@ -1,6 +1,7 @@
 {
     "name": "unisa/basalam-proxy",
     "description": "Proxy package for Basalam SDK",
+    "version": "dev-master",
     "type": "library",
     "autoload": {
       "psr-4": {

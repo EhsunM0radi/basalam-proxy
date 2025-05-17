@@ -7,6 +7,7 @@ use Unisa\BasalamProxy\Config\ProxyConfig;
 use Unisa\BasalamProxy\Factories\CategoryDetectionClientFactory;
 use BasalamSDK\Api\LabelingApi;
 use BasalamSDK\Api\OpenApiFileApi;
+use BasalamSDK\Api\V3CategoryApi;
 use BasalamSDK\Api\V4ProductApi;
 // use BasalamSDK\Model\ApiSchemasV4ProductSchemaCreateProductSchema;
 // use BasalamSDK\Model\ApiSchemasV4ProductSchemaPatchUpdateProductSchema;
@@ -20,6 +21,7 @@ class DefaultSdkAdapter implements SdkAdapterInterface
     protected LabelingApiAdapter $labeling;
     protected ProductApiAdapter $product;
     protected FileApiAdapter $file;
+    protected CategoryApiAdapter $category;
 
     public function __construct(protected ProxyConfig $config)
     {
@@ -30,6 +32,7 @@ class DefaultSdkAdapter implements SdkAdapterInterface
         $this->labeling = new LabelingApiAdapter(new LabelingApi($cdetectionClient, $cdetectionConf));
         $this->product = new ProductApiAdapter(new V4ProductApi($coreClient, $coreConf));
         $this->file = new FileApiAdapter(new FileApi($uploadioClient, $uploadioConf),new OpenApiFileApi($uploadioClient, $uploadioConf));
+        $this->category = new CategoryApiAdapter(new V3CategoryApi($coreClient,$coreConf));
     }
 
     public function predictCategory(string $title)
@@ -70,5 +73,10 @@ class DefaultSdkAdapter implements SdkAdapterInterface
     public function bulkDeleteFile(string $secret_service, $bulk_delete_file_schema)
     {
         return $this->file->bulkDelete($secret_service,$bulk_delete_file_schema);
+    }
+
+    public function getProductAttributes(int $categoryId)
+    {
+        return $this->category->attributes($categoryId);
     }
 }
